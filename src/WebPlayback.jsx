@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { get } from 'request';
+import PlaybackController from './PlaybackController';
 
 const track = {
     name: "",
@@ -22,35 +22,18 @@ function WebPlayback(props) {
     const [current_track, setTrack] = useState(track);
 
     useEffect(() => {
-        async function fetchProfile(token) {
-            const result = await fetch("https://api.spotify.com/v1/me", {
-                method: "GET", headers: { Authorization: `Bearer ${token}` }
-            }).then(response => response.json())
-             .then(response => console.log(JSON.stringify(response)))
-           
-            //return await result.json();
-        }
-
-        async function fetchPlaylist(token) {
-            const result = await fetch("https://api.spotify.com/v1/playlists/03jCaLIll2p3pXqB2j5cM1", {
-                method: "GET", headers: { Authorization: `Bearer ${token}` }
-            }).then(response => response.json())
-             .then(response => console.log(JSON.stringify(response)))
-           
-            //return await result.json();
-        }
-
+    
         //player > add item to playback queue 
         // then just click next song
         
         //web play back api is just for player
         //spotify api is for controlling spotify activity
 
-        //PUSH TO GITHUBBBBB!!!!!
-
+        let controller = new PlaybackController(props.token);
+        controller.fetchProfile();
         console.log(props.token);
-        fetchProfile(props.token);
-        fetchPlaylist(props.token);
+        controller.fetchPlaylist(props.token);
+        
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
         script.async = true;
