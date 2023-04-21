@@ -30,9 +30,7 @@ function WebPlayback(props) {
         //spotify api is for controlling spotify activity
 
         let controller = new PlaybackController(props.token);
-        controller.fetchProfile();
-        console.log(props.token);
-        controller.fetchPlaylist(props.token);
+        controller.fetchPlaylist();
         
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -52,6 +50,7 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
+                controller.transferPlayback(device_id);
             });
 
             player.addListener('not_ready', ({ device_id }) => {
@@ -74,7 +73,6 @@ function WebPlayback(props) {
             }));
             
             player.connect();
-
         };
     }, []);
 
@@ -83,7 +81,7 @@ function WebPlayback(props) {
             <>
                 <div className="container">
                     <div className="main-wrapper">
-                        <b> Instance not active. Transfer your playback using your Spotify app </b>
+                        <b> Instance not active. Please wait as we prepare the spotify player </b>
                     </div>
                 </div>
             </>)
