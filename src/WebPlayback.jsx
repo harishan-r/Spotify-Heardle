@@ -13,6 +13,12 @@ const track = {
     ]
 }
 
+function getRandomSong(playlist) {
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    const id = playlist[randomIndex];
+    return id;
+}
+
 
 function WebPlayback(props) {
 
@@ -20,25 +26,17 @@ function WebPlayback(props) {
     const [is_active, setActive] = useState(false);
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
-
-    useEffect(() => {
     
-        //player > add item to playback queue 
-        // then just click next song
-        
-        //web play back api is just for player
-        //spotify api is for controlling spotify activity
-
-        let controller = new PlaybackController(props.token);
-        controller.fetchPlaylist();
-        
+    let controller = new PlaybackController(props.token); 
+    
+    useEffect(async () => {
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
         script.async = true;
 
         document.body.appendChild(script);
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
+        window.onSpotifyWebPlaybackSDKReady = async () => {
 
             const player = new window.Spotify.Player({
                 name: 'Web Playback SDK',
@@ -48,10 +46,14 @@ function WebPlayback(props) {
 
             setPlayer(player);
 
-            player.addListener('ready', ({ device_id }) => {
+            const playlist = await controller.fetchPlaylist();
+            console.log(playlist);
+
+            player.addListener('ready', async ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                controller.transferPlayback(device_id);
+                await controller.startPlayback(device_id);
             });
+            
 
             player.addListener('not_ready', ({ device_id }) => {
                 console.log('Device ID has gone offline', device_id);
@@ -108,9 +110,7 @@ function WebPlayback(props) {
                             <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
                                 &gt;&gt;
                             </button>
-                            <a className="btn-spotify"  >
-                                Get Playlist 
-                            </a>
+                            <button className= "btn-spotify" onClick={() => {controller.toggleShuffle(true) }}> SHUFFLE</button>
                         </div>
                     </div>
                 </div>

@@ -7,25 +7,34 @@ export default class PlaybackController {
     constructor(token: any) {
         this.token = token;
     }
-
-    getCall(path: string[]) {
+    
+    generatePath(path: string[]) {
         var url = api;
         for (let i = 0; i < path.length; i++) {
             url += "/" + path[i];
         }
+        return url;
+    }
+
+    getCall(path: string[]) {
+        const url = this.generatePath(path);
         return fetch(url, {
             method: "GET", headers: { Authorization: `Bearer ${this.token}` }
         })
     }
 
     putCall(path: string[], body: any) {
-        var url = api;
-        for (let i = 0; i < path.length; i++) {
-            url += "/" + path[i];
+        const url = this.generatePath(path);
+        if (body) {
+            return fetch(url, {
+                method: "PUT", headers: { Authorization: `Bearer ${this.token}` }, body: JSON.stringify(body)
+            })
+        } else {
+            return fetch(url, {
+                method: "PUT", headers: { Authorization: `Bearer ${this.token}` }
+            })
         }
-        return fetch(url, {
-            method: "PUT", headers: { Authorization: `Bearer ${this.token}` }, body: JSON.stringify(body)
-        })
+        
     }
 
     fetchProfile() {    
@@ -34,17 +43,19 @@ export default class PlaybackController {
             .then((response: any) => console.log(JSON.stringify(response)));
     }
     
-    fetchPlaylist() {
+    async fetchPlaylist() {
         const result = this.getCall(["playlists", playlist_id])
             .then(response => response.json())
             .then(response => {
                 const item_list = response.tracks.items;
-                const track_list = item_list.map((item: any) => item.track.name);
-                console.log(track_list);
+                const tracklist: string[] = item_list.map((item: any) => item.track.id);
+                return(tracklist);
             })
+       
+        return(result);
     }
 
-    transferPlayback(device_id: string) {
+    async transferPlayback(device_id: string) {
         const result = this.putCall(["me", "player"], 
             {
                 "device_ids": [
@@ -52,6 +63,26 @@ export default class PlaybackController {
                 ]
             }
         )
+    }
+
+    async startPlayback(device_id: string) {
+        const uri = "spotify:playlist:" + playlist_id;
+        const result = this.putCall(["me", "player", "play", "?device_id=" + device_id],
+            {
+                "context_uri": uri
+                
+            }
+        )
+    }
+
+    async toggleShuffle(state: boolean) {
+        const result = this.putCall(["me", "player", "shuffle", "?state=" + state], null)
+    }
+
+    nextRandom(){ 
+        const url = this.generatePath(["me", "player", "queue", "?uri=spotify:track:3QLjDkgLh9AOEHlhQtDuhs"]);
+        const result = fetch(url, { method: "POST", headers: { Authorization: `Bearer ${this.token}` } 
+        })
     }
 }
 
