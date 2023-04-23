@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PlaybackController from './PlaybackController';
+import PlaybackController from '../../utils/PlaybackController';
 
 const track = {
     name: "",
