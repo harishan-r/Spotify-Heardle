@@ -13,13 +13,6 @@ const track = {
     ]
 }
 
-function getRandomSong(playlist) {
-    const randomIndex = Math.floor(Math.random() * playlist.length);
-    const id = playlist[randomIndex];
-    return id;
-}
-
-
 function WebPlayback(props) {
 
     const [is_paused, setPaused] = useState(false);
@@ -27,7 +20,7 @@ function WebPlayback(props) {
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
     
-    let controller = new PlaybackController(props.token); 
+    const controller = new PlaybackController(props.token); 
     
     useEffect(async () => {
         const script = document.createElement("script");
@@ -46,8 +39,8 @@ function WebPlayback(props) {
 
             setPlayer(player);
 
-            const playlist = await controller.fetchPlaylist();
-            console.log(playlist);
+            // const playlist = await controller.fetchPlaylist();
+            // console.log(playlist);
 
             player.addListener('ready', async ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
@@ -93,11 +86,11 @@ function WebPlayback(props) {
                 <div className="container">
                     <div className="main-wrapper">
 
-                        <img src={current_track.album.images[0].url} className="now-playing__cover" alt="" />
+                        {/* <img src={current_track.album.images[0].url} className="now-playing__cover" alt="" /> */}
 
                         <div className="now-playing__side">
-                            <div className="now-playing__name">{current_track.name}</div>
-                            <div className="now-playing__artist">{current_track.artists[0].name}</div>
+                            {/* <div className="now-playing__name">{current_track.name}</div> */}
+                            {/* <div className="now-playing__artist">{current_track.artists[0].name}</div> */}
 
                             <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
                                 &lt;&lt;

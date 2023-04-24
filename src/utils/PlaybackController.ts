@@ -1,4 +1,6 @@
-const playlist_id = "03jCaLIll2p3pXqB2j5cM1";
+const engPlaylist_id = "03jCaLIll2p3pXqB2j5cM1";
+const tamPlaylist_id = "1dx5RbbXoScgy4x10p3vKJ"
+const playlist_id = tamPlaylist_id;
 const api = "https://api.spotify.com/v1";
 
 export default class PlaybackController {
@@ -48,7 +50,7 @@ export default class PlaybackController {
             .then(response => response.json())
             .then(response => {
                 const item_list = response.tracks.items;
-                const tracklist: string[] = item_list.map((item: any) => item.track.id);
+                const tracklist: string[] = item_list.map((item: any) => item.track.name);
                 return(tracklist);
             })
        

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import WebPlayback from './components/WebPlayback/WebPlayback'
 import Login from './components/Login/Login'
 import './styles/App.css';
+import GuessBar from './components/GuessBar/GuessBar';
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
         
         { (token === '') ? <Login/> : (
         <div>
-          
+          <GuessBar token={token} />
           <WebPlayback token={token} /> 
         </div>
         )}
