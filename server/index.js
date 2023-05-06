@@ -11,8 +11,7 @@ dotenv.config()
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
-//var spotify_redirect_uri = 'http://localhost:3000/auth/callback'
-var spotify_redirect_uri = 'https://harishan-r.github.io/Spotify-Heardle/auth/callback'
+var spotify_redirect_uri = 'http://localhost:3000/auth/callback'
 
 var generateRandomString = function (length) {
   var text = '';
@@ -26,7 +25,7 @@ var generateRandomString = function (length) {
 
 var app = express();
 
-app.get('/Spotify-Heardle/auth/login', (req, res) => {
+app.get('/auth/login', (req, res) => {
   var scope = "streaming user-read-email user-read-private user-modify-playback-state user-read-currently-playing"
   var state = generateRandomString(16);
 
@@ -41,7 +40,7 @@ app.get('/Spotify-Heardle/auth/login', (req, res) => {
   res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
 })
 
-app.get('/Spotify-Heardle/auth/callback', (req, res) => {
+app.get('/auth/callback', (req, res) => {
 
   var code = req.query.code;
 
@@ -68,7 +67,7 @@ app.get('/Spotify-Heardle/auth/callback', (req, res) => {
 
 })
 
-app.get('/Spotify-Heardle/auth/token', (req, res) => {
+app.get('/auth/token', (req, res) => {
   res.json({ access_token: access_token})
 })
 
