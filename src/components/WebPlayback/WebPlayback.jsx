@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PlaybackController from '../../utils/PlaybackController';
+import "./WebPlayback.css"
 
 const track = {
     name: "",
@@ -19,6 +20,7 @@ function WebPlayback(props) {
     const [is_active, setActive] = useState(false);
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
+    const [counter, setCounter] = React.useState(2);
     
     const controller = new PlaybackController(props.token); 
     
@@ -42,7 +44,9 @@ function WebPlayback(props) {
 
             player.addListener('ready', async ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                await controller.startPlayback(device_id);
+                const tracklist = await controller.fetchPlaylistIds();
+                console.log(tracklist);
+                await controller.startPlayback(device_id, "0Jd4bO2Yw65QXmpgiHpCgq");
             });
             
 
@@ -67,8 +71,15 @@ function WebPlayback(props) {
             
             player.connect();
             
+
         };
     }, []);
+
+    useEffect(() => {
+        const timer =
+          counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+        return () => clearInterval(timer);
+      }, [counter]);
 
     if (!is_active) { 
         return (
@@ -91,18 +102,18 @@ function WebPlayback(props) {
                             {/* <div className="now-playing__name">{current_track.name}</div> */}
                             {/* <div className="now-playing__artist">{current_track.artists[0].name}</div> */}
 
-                            <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
+                            {/* <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
                                 &lt;&lt;
-                            </button>
-
+                            </button> */}
+                            <div>Countdown: {counter}</div>
                             <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
                                 { is_paused ? "PLAY" : "PAUSE" }
                             </button>
 
-                            <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
+                            {/* <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
                                 &gt;&gt;
-                            </button>
-                            <button className= "btn-spotify" onClick={() => {controller.toggleShuffle(true) }}> SHUFFLE</button>
+                            </button> */}
+                            {/* <button className= "btn-spotify" onClick={() => {controller.toggleShuffle(true) }}> SHUFFLE</button> */}
                         </div>
                     </div>
                 </div>

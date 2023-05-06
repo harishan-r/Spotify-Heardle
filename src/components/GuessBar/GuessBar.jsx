@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PlaybackController from '../../utils/PlaybackController';
+import "./GuessBar.css"
 
 function GuessBar(props) {
     const [value, setValue] = useState('');
     const [playlist, setPlaylist] = useState(undefined);
     const [list, setList] = useState([]);
     const [current_track, setCurrentTrack] = useState("");
+    const [isCorrect, setCorrect] = useState(false);
+
     const controller = new PlaybackController(props.token);
 
     const guessList = list => {
@@ -13,9 +16,9 @@ function GuessBar(props) {
 
         for (let i = 0; i < 5; i++) {
             if(list[i]) {
-                content.push(<div class="alert alert-dark" data-bs-theme="dark" key={i}>{list[i]}</div>);
+                content.push(<div className="alert alert-dark" data-bs-theme="dark" key={i}>{list[i]}</div>);
             } else {
-                content.push(<div class="alert alert-dark" data-bs-theme="dark" role="alert" key={i}> </div>);
+                content.push(<div className="alert alert-dark" data-bs-theme="dark" role="alert" key={i}> </div>);
             }
             
         }
@@ -26,14 +29,15 @@ function GuessBar(props) {
         setValue(event.target.value);
     }
     const onGuess = async (guess) => {
-        //check if its right and update the count
         setValue("");
         setList([...list, guess]);
         const track = await controller.getCurrentSong();
+        setCurrentTrack(track);
         console.log(track);
         console.log("Guess Check: " + guess);
         if(track == guess){
-            console.log("CORRECT!")
+            console.log("CORRECT!");
+            setCorrect(true);
         }
     }
     
@@ -47,13 +51,18 @@ function GuessBar(props) {
     if (playlist) {
         return(
             <div className="guess-container">
-                <ul>{guessList(list)}</ul>
-                <div>{list.length == 5 ? "Answer: " : ""}</div>
+                <ul className="guessed-list">{guessList(list)}</ul>
+                <div>{list.length == 5 ? "Answer: " + current_track : ""}</div>
+                <div>{isCorrect ? "Good Job!" : ""}</div>
                 <div className="guess-inner">
-                    <input class="alert alert-light" type="text" value={value} onChange={onChange} placeholder="Enter Guess..." disabled={list.length == 5}></input>
-                    <button disabled={value == ""} onClick={()=>onGuess(value)}>Guess!</button>
+                    <input className="alert alert-secondary" data-bs-theme="dark" type="text" value={value} onChange={onChange} placeholder="Enter Guess..." disabled={list.length == 5 || isCorrect}></input>
+                    <button disabled={value == "" || isCorrect} onClick={()=>onGuess(value)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
                 </div>
-                <div className="guess-dropdown">
+                <ul className="guess-dropdown">
                     {playlist.filter((item) => {
                         const guess = value.toLowerCase();
                         const song = item.toLowerCase();
@@ -61,9 +70,9 @@ function GuessBar(props) {
                         return guess && song.startsWith(guess) && guess != song;
                     }).slice(0,3)
                     .map(element => {
-                        return <div className="dropdown-row" onClick={() => setValue(element)} key={element}>{element}</div>
+                        return <li className="list-group-item" onClick={() => setValue(element)} key={element}>{element}</li>
                     })}
-                </div>
+                </ul>
             </div>
         )
     } else {

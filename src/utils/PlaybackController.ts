@@ -1,7 +1,8 @@
 const engPlaylist_id = "03jCaLIll2p3pXqB2j5cM1";
 const tamPlaylist_id = "1dx5RbbXoScgy4x10p3vKJ"
 const tamPlaylist_id2 = "0oMz1snKLDzSj8WBl5W3K5"
-const playlist_id = tamPlaylist_id;
+const tamPlaylist_swe = "3U1cvKhwFI3z6bRm0z8E2g"
+const playlist_id = tamPlaylist_swe;
 const api = "https://api.spotify.com/v1";
 
 export default class PlaybackController {
@@ -58,6 +59,18 @@ export default class PlaybackController {
         return(result);
     }
 
+    async fetchPlaylistIds() {
+        const result = this.getCall(["playlists", playlist_id])
+            .then(response => response.json())
+            .then(response => {
+                const item_list = response.tracks.items;
+                const tracklist: string[] = item_list.map((item: any) => item.track.id);
+                return(tracklist);
+            })
+       
+        return(result);
+    }
+
     async transferPlayback(device_id: string) {
         const result = this.putCall(["me", "player"], 
             {
@@ -68,12 +81,17 @@ export default class PlaybackController {
         )
     }
 
-    async startPlayback(device_id: string) {
+    async startPlayback(device_id: string, song_id: string) {
         const uri = "spotify:playlist:" + playlist_id;
+        //const uri = "spotify:track:" + song_id;
+        const offset = Math.floor(Math.random() * 75);
         const result = this.putCall(["me", "player", "play", "?device_id=" + device_id],
             {
-                "context_uri": uri
-                
+                "context_uri": uri,
+                "offset": {
+                    "position": offset
+                }          
+
             }
         )
     }

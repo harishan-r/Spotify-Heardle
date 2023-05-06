@@ -7,9 +7,9 @@ function NavBar() {
         <header id="nav-bar">
             <img id="spotify-logo" src={logo} alt="spotify-logo" />
             <div id="title">Tamil Heardle</div>
-            <label class="switch">
+            <label className="switch">
                 <input type="checkbox"/>
-                <span class="slider round"></span>
+                <span className="slider round"></span>
             </label>
         </header>
     )

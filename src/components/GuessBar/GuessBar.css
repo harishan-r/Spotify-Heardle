@@ -1,0 +1,18 @@
+.guess-container {
+    text-align: center;
+    padding: 0;
+    
+}
+
+input {
+    width: 45%;
+    
+}
+
+.guessed-list {
+    width: 50%;
+    margin: 0 auto;
+    padding: 0;
+    text-align: left;
+}
+
