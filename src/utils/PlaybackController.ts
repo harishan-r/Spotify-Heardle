@@ -1,5 +1,6 @@
 const engPlaylist_id = "03jCaLIll2p3pXqB2j5cM1";
 const tamPlaylist_id = "1dx5RbbXoScgy4x10p3vKJ"
+const tamPlaylist_id2 = "0oMz1snKLDzSj8WBl5W3K5"
 const playlist_id = tamPlaylist_id;
 const api = "https://api.spotify.com/v1";
 
@@ -85,6 +86,21 @@ export default class PlaybackController {
         const url = this.generatePath(["me", "player", "queue", "?uri=spotify:track:3QLjDkgLh9AOEHlhQtDuhs"]);
         const result = fetch(url, { method: "POST", headers: { Authorization: `Bearer ${this.token}` } 
         })
+    }
+
+    async getCurrentSong() {
+        const result = this.getCall(["me", "player", "currently-playing"])
+            .then(response => response.json())
+            .then(response => {
+                const track: string = response.item.name;
+                return(track);
+            })
+        
+        return(result);
+    }
+
+    async pausePlayback(device_id: string) {
+        const result = this.putCall(["me", "player", "pause", "?device_id=" + device_id], null);
     }
 }
 

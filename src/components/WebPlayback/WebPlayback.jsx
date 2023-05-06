@@ -22,6 +22,7 @@ function WebPlayback(props) {
     
     const controller = new PlaybackController(props.token); 
     
+    
     useEffect(async () => {
         const script = document.createElement("script");
         script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -38,9 +39,6 @@ function WebPlayback(props) {
             });
 
             setPlayer(player);
-
-            // const playlist = await controller.fetchPlaylist();
-            // console.log(playlist);
 
             player.addListener('ready', async ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
@@ -64,10 +62,11 @@ function WebPlayback(props) {
                 player.getCurrentState().then( state => { 
                     (!state)? setActive(false) : setActive(true) 
                 });
-
+                
             }));
             
             player.connect();
+            
         };
     }, []);
 

@@ -5,15 +5,17 @@ function GuessBar(props) {
     const [value, setValue] = useState('');
     const [playlist, setPlaylist] = useState(undefined);
     const [list, setList] = useState([]);
+    const [current_track, setCurrentTrack] = useState("");
+    const controller = new PlaybackController(props.token);
 
     const guessList = list => {
         let content = [];
 
         for (let i = 0; i < 5; i++) {
             if(list[i]) {
-                content.push(<li key={i}>{list[i]}</li>);
+                content.push(<div class="alert alert-dark" data-bs-theme="dark" key={i}>{list[i]}</div>);
             } else {
-                content.push(<li key={i}></li>);
+                content.push(<div class="alert alert-dark" data-bs-theme="dark" role="alert" key={i}> </div>);
             }
             
         }
@@ -23,17 +25,22 @@ function GuessBar(props) {
     const onChange = (event) => {
         setValue(event.target.value);
     }
-    const onGuess = (guess) => {
+    const onGuess = async (guess) => {
         //check if its right and update the count
         setValue("");
         setList([...list, guess]);
+        const track = await controller.getCurrentSong();
+        console.log(track);
         console.log("Guess Check: " + guess);
+        if(track == guess){
+            console.log("CORRECT!")
+        }
     }
     
     useEffect( async () => {
-        const controller = new PlaybackController(props.token);
         const tracklist = await controller.fetchPlaylist();
         setPlaylist(tracklist);
+        //controller.toggleShuffle(true);
         console.log(tracklist);
     }, []);
 
@@ -43,7 +50,7 @@ function GuessBar(props) {
                 <ul>{guessList(list)}</ul>
                 <div>{list.length == 5 ? "Answer: " : ""}</div>
                 <div className="guess-inner">
-                    <input type="text" value={value} onChange={onChange} placeholder="Enter Guess..." disabled={list.length == 5}></input>
+                    <input class="alert alert-light" type="text" value={value} onChange={onChange} placeholder="Enter Guess..." disabled={list.length == 5}></input>
                     <button disabled={value == ""} onClick={()=>onGuess(value)}>Guess!</button>
                 </div>
                 <div className="guess-dropdown">
@@ -52,7 +59,7 @@ function GuessBar(props) {
                         const song = item.toLowerCase();
 
                         return guess && song.startsWith(guess) && guess != song;
-                    }).slice(0,5)
+                    }).slice(0,3)
                     .map(element => {
                         return <div className="dropdown-row" onClick={() => setValue(element)} key={element}>{element}</div>
                     })}

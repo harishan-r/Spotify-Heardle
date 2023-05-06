@@ -3,6 +3,7 @@ import WebPlayback from './components/WebPlayback/WebPlayback'
 import Login from './components/Login/Login'
 import './styles/App.css';
 import GuessBar from './components/GuessBar/GuessBar';
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         
         { (token === '') ? <Login/> : (
         <div>
+          <NavBar/>
           <GuessBar token={token} />
           <WebPlayback token={token} /> 
         </div>
