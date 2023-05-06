@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
 
     async function getToken() {
-      const response = await fetch('/auth/token');
+      const response = await fetch('/Spotify-Heardle/auth/token');
       const json = await response.json();
       setToken(json.access_token);
     }
