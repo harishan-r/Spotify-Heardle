@@ -66,7 +66,7 @@ app.get('/auth/callback', (req, res) => {
   });
 
 })
- 
+
 app.get('/auth/token', (req, res) => {
   res.json({ access_token: access_token})
 })
@@ -75,18 +75,4 @@ app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`)
 })
 
-// app.get('/playlists/1dx5RbbXoScgy4x10p3vKJ', (req, res) => { 
-//   var state = generateRandomString(16);
-
-//   var auth_query_parameters = new URLSearchParams({
-//     response_type: "code",
-//     client_id: spotify_client_id,
-//     scope: scope,
-//     redirect_uri: spotify_redirect_uri,
-//     state: state
-//   })
-
-//   res.redirect('https://accounts.spotify.com/playlists/1dx5RbbXoScgy4x10p3vKJ/?' + auth_query_parameters.toString());
-  
-
-// })
+module.exports = app;
