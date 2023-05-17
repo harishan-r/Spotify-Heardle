@@ -1,4 +1,4 @@
-#How To Play
+# How To Play
 
 # How To Get Setup
 
