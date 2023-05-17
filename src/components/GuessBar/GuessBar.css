@@ -4,15 +4,37 @@
     
 }
 
-input {
-    width: 45%;
+#search-input {
+    width: 75%;
+    max-width: 650px;
     
 }
 
 .guessed-list {
-    width: 50%;
+    width: 85%;
     margin: 0 auto;
     padding: 0;
     text-align: left;
+    max-width: 750px;
 }
 
+#search-btn {
+    background-color: transparent;
+    border: none;
+    fill: white;
+    padding-left: 10px;
+    min-width: 25px;
+    width: 2%;
+}
+
+#search-btn:disabled {
+    fill: grey;
+}
+
+.cross-icon {
+    margin-right: 6px;
+}
+
+.check-icon {
+    margin-right: 6px;
+}

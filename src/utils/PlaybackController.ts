@@ -2,7 +2,7 @@ const engPlaylist_id = "03jCaLIll2p3pXqB2j5cM1";
 const tamPlaylist_id = "1dx5RbbXoScgy4x10p3vKJ"
 const tamPlaylist_id2 = "0oMz1snKLDzSj8WBl5W3K5"
 const tamPlaylist_swe = "3U1cvKhwFI3z6bRm0z8E2g"
-const playlist_id = tamPlaylist_swe;
+const playlist_id = engPlaylist_id;
 const api = "https://api.spotify.com/v1";
 
 export default class PlaybackController {
